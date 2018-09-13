@@ -18,8 +18,10 @@ def statesCombinations(meterlist):
     max_states = 7
     states = [None] * len(meterlist)
     for i, meter in enumerate(meterlist):
-        states[i] = cluster(meter.power_series().next(), max_num_clusters=max_states)
-
+        try:
+            states[i] = cluster(meter.power_series().next(), max_num_clusters=max_states)
+        except AttributeError:
+            states[i] = cluster(next(meter.power_series()), max_num_clusters=max_states)
     return np.sum(cartesian(states), axis=1)
 
 def compute(metergroup):
